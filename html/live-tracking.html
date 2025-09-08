@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bus Tracking - Bus Ticketing System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/tracking.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#"><i class="fas fa-bus me-2"></i>Bus Ticketing</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="#"><i class="fas fa-user me-1"></i>Profile</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Trip Information Sidebar -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i>Your Trip</h5>
+                </div>
+                <div class="card-body">
+                    <div class="trip-info">
+                        <h6 class="text-primary">ABC Transport Express</h6>
+                        <p class="mb-2"><strong>Bus Number:</strong> ABC-1234</p>
+                        <p class="mb-2"><strong>Route:</strong> Colombo → Kandy</p>
+                        <p class="mb-2"><strong>Seat:</strong> B2</p>
+                        <p class="mb-2"><strong>Departure:</strong> 08:30 AM</p>
+                        <p class="mb-0"><strong>Expected Arrival:</strong> 12:00 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Status -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-broadcast-tower me-2"></i>Live Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="status-indicator mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="status-dot status-moving me-3"></div>
+                            <div>
+                                <h6 class="mb-0 text-success">Bus is Moving</h6>
+                                <small class="text-muted">Last updated: 2 minutes ago</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="current-location mb-3">
+                        <p class="mb-1"><strong>Current Location:</strong></p>
+                        <p class="text-muted mb-0">Near Kegalle, A1 Highway</p>
+                    </div>
+
+                    <div class="speed-info mb-3">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="metric-card">
+                                    <h4 class="text-primary mb-0">65</h4>
+                                    <small>km/h</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="metric-card">
+                                    <h4 class="text-success mb-0">45</h4>
+                                    <small>km remaining</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eta-info">
+                        <div class="alert alert-info mb-0">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>ETA:</strong> 11:45 AM (15 min early)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Route Progress -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-route me-2"></i>Route Progress</h6>
+                </div>
+                <div class="card-body">
+                    <div class="route-timeline">
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">Colombo Central</h6>
+                                <small class="text-muted">08:30 AM - Departed</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">Kadawatha</h6>
+                                <small class="text-muted">09:15 AM - Passed</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item active">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">Kegalle</h6>
+                                <small class="text-success">Current Location</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">Mawanella</h6>
+                                <small class="text-muted">ETA: 11:00 AM</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">Kandy Central</h6>
+                                <small class="text-muted">ETA: 11:45 AM</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-map-marked-alt me-2"></i>Live Location</h5>
+                    <div class="map-controls">
+                        <button class="btn btn-sm btn-outline-primary me-2" id="centerMap">
+                            <i class="fas fa-crosshairs me-1"></i>Center
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" id="refreshLocation">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div id="mapContainer" class="map-container">
+                        <!-- Map will be rendered here -->
+                        <div class="map-placeholder">
+                            <div class="text-center py-5">
+                                <i class="fas fa-map fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Interactive Map</h5>
+                                <p class="text-muted">Live bus location will be displayed here</p>
+                                <button class="btn btn-primary" id="loadMap">
+                                    <i class="fas fa-play me-2"></i>Load Live Map
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-phone fa-2x text-primary mb-3"></i>
+                            <h6>Emergency Contact</h6>
+                            <p class="mb-0">+94 11 234 5678</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-headset fa-2x text-success mb-3"></i>
+                            <h6>Customer Support</h6>
+                            <p class="mb-0">24/7 Live Chat Available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/tracking.js"></script>
+</body>
+</html>
