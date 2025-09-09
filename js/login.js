@@ -74,6 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // ✅ Extract token from response.data.token
             const token = data?.data?.token;
+            const user = data?.data?.user;
+
             if (!token) {
                 console.error("No token returned from server!");
                 alert("Login successful but token missing!");
@@ -82,7 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Save token to localStorage
             localStorage.setItem("jwtToken", token);
+            if (user) {
+                localStorage.setItem("user", JSON.stringify(user));
+            }
+
             console.log("JWT token saved:", localStorage.getItem("jwtToken"));
+            console.log("User saved:", localStorage.getItem("user"));
 
             alert("Login successful!");
             setTimeout(() => {
@@ -101,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function fetchWithAuth(url, options = {}) {
         const token = localStorage.getItem("jwtToken");
         if (!token) {
-            alert("Please login first!");
+            // Silent redirect to login if token missing
             window.location.href = "login.html";
             return;
         }
@@ -110,11 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await fetch(url, { ...options, headers });
 
         if (res.status === 401) {
-            alert("Session expired. Please login again.");
+            // Token expired → remove and redirect silently
             localStorage.removeItem("jwtToken");
+            localStorage.removeItem("user");
             window.location.href = "login.html";
+            return;
         }
         return res;
     }
-
 });
