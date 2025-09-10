@@ -1,76 +1,158 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector(".quick-search-section form");
-    const tableBody = document.getElementById("busScheduleTable");
+    const cardsContainer = document.getElementById("busScheduleCards");
     const fromSelect = document.getElementById("fromStop");
     const toSelect = document.getElementById("toStop");
+    const lastUpdated = document.getElementById("lastUpdated");
 
-    // 1️⃣ Load stops dynamically
+    // Load stops
     async function loadStops() {
         try {
             const res = await fetch("http://localhost:8080/api/v1/stop/get");
             const result = await res.json();
 
-            if (!res.ok || !result.data || result.data.length === 0) {
+            fromSelect.innerHTML = "";
+            toSelect.innerHTML = "";
+
+            if (!result.data || !result.data.length) {
                 fromSelect.innerHTML = `<option>No stops found</option>`;
                 toSelect.innerHTML = `<option>No stops found</option>`;
                 return;
             }
 
-            fromSelect.innerHTML = "";
-            toSelect.innerHTML = "";
-
             result.data.forEach(stop => {
-                const option = document.createElement("option");
-                option.value = stop.name;
-                option.textContent = stop.name;
-
-                fromSelect.appendChild(option.cloneNode(true));
-                toSelect.appendChild(option);
+                fromSelect.innerHTML += `<option value="${stop.name}">${stop.name}</option>`;
+                toSelect.innerHTML += `<option value="${stop.name}">${stop.name}</option>`;
             });
-
         } catch (err) {
-            console.error("Error loading stops:", err);
+            console.error("Stops load error:", err);
             fromSelect.innerHTML = `<option>Error loading stops</option>`;
             toSelect.innerHTML = `<option>Error loading stops</option>`;
         }
     }
-    loadStops(); // call once on page load
 
-    // 2️⃣ Handle form submit for search
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    loadStops();
 
+    // Fetch schedules
+    async function fetchSchedules() {
         const from = fromSelect.value;
         const to = toSelect.value;
         const date = form.querySelector("input[type='date']").value;
 
-        tableBody.innerHTML = '<tr><td colspan="8">Loading...</td></tr>';
+        if (!from || !to || !date) {
+            alert("Please select From, To and Date.");
+            return;
+        }
+
+        cardsContainer.innerHTML = `<div class="col-12 text-center"><p>Loading...</p></div>`;
 
         try {
-            const res = await fetch(`http://localhost:8080/api/v1/schedule/search?from=${from}&to=${to}&date=${date}`);
-            const data = await res.json();
+            const token = localStorage.getItem("jwtToken") || "";
+            const res = await fetch(
+                `http://localhost:8080/api/v1/schedule/search?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Accept": "application/json"
+                    }
+                }
+            );
 
-            if (res.ok && data.data.length) {
-                tableBody.innerHTML = "";
-                data.data.forEach(schedule => {
-                    const row = `<tr>
-                        <td>${schedule.busId}</td>
-                        <td>${from} ➜ ${to}</td>
-                        <td>${schedule.departTime}</td>
-                        <td>--:--</td>
-                        <td>--h --m</td>
-                        <td>-- LKR</td>
-                        <td>--</td>
-                        <td><button class="btn btn-sm btn-primary">Book</button></td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
-                });
-            } else {
-                tableBody.innerHTML = '<tr><td colspan="8">No buses found.</td></tr>';
+            console.log("HTTP Status:", res.status);
+
+            // No buses
+            if (res.status === 404) {
+                cardsContainer.innerHTML = `<div class="col-12 text-center"><p>No buses found.</p></div>`;
+                return;
             }
+
+            // Any other server error
+            if (!res.ok) {
+                cardsContainer.innerHTML = `<div class="col-12 text-center"><p>Error: ${res.status}</p></div>`;
+                return;
+            }
+
+            const data = await res.json();
+            console.log("Parsed JSON:", data);
+
+            const schedules = Array.isArray(data.data) ? data.data : [];
+
+            schedules.forEach(s => {
+                if (!s.tripId && s.tripId !== 0) {
+                    s.tripId = null; // or assign default value if you want
+                }
+            });
+
+            localStorage.setItem("busSchedules", JSON.stringify(schedules));
+
+            if (!schedules.length) {
+                cardsContainer.innerHTML = `<div class="col-12 text-center"><p>No buses found.</p></div>`;
+                return;
+            }
+
+            // Render schedules
+            cardsContainer.innerHTML = "";
+            schedules.forEach(s => {
+                cardsContainer.innerHTML += `
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-lg h-100 border-0" style="border-radius: 15px;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-primary fw-bold">
+                                    ${s.plateNo || "--"} <span class="text-dark">(${s.busType || "--"})</span>
+                                </h5>
+                                <p class="text-info fw-semibold mb-3">
+                                    <i class="fas fa-route me-2"></i>${s.routeName || "--"}
+                                </p>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted"><strong>Departure:</strong> ${s.departDateTime || "--:--"}</span>
+                                    <span class="text-muted"><strong>Arrival:</strong> ${s.arrivalEta || "--:--"}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="fw-bold text-success">
+                                        <i class="fas fa-coins me-1"></i>${s.baseFare || "--"} LKR
+                                    </span>
+                                </div>
+                                <div class="mt-auto">
+                                    <button class="btn btn-gradient w-100 book-btn fw-bold py-2" data-id="${s.scheduleId}">
+                                        <i class="fas fa-chair me-2"></i>Select Seat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            lastUpdated.textContent = new Date().toLocaleTimeString();
         } catch (err) {
-            console.error(err);
-            tableBody.innerHTML = '<tr><td colspan="8">Error fetching data</td></tr>';
+            console.error("Fetch error:", err);
+            cardsContainer.innerHTML = `<div class="col-12 text-center"><p>Error fetching data</p></div>`;
+        }
+    }
+
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+        fetchSchedules();
+    });
+
+    cardsContainer.addEventListener("click", e => {
+        if (e.target.classList.contains("book-btn")) {
+            const scheduleId = e.target.dataset.id;
+            const schedules = JSON.parse(localStorage.getItem("busSchedules")) || [];
+            const selectedSchedule = schedules.find(s => s.scheduleId == scheduleId);
+
+            if (selectedSchedule) {
+                if (!selectedSchedule.tripId) {
+                    console.error("Selected schedule has no tripId!", selectedSchedule);
+                    alert("Cannot select seats for this bus. Trip ID missing.");
+                    return;
+                }
+
+                localStorage.setItem("selectedBus", JSON.stringify(selectedSchedule));
+                window.location.href = "seat-selection.html"; // Navigate
+            } else {
+                alert("Schedule not found!");
+            }
         }
     });
 });

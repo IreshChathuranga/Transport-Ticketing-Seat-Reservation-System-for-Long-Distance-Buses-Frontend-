@@ -327,3 +327,23 @@ body {
 #bus-schedule {
     margin-top: 60px; /* adjust depending on hero height */
 }
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradient button */
+.btn-gradient {
+    background: linear-gradient(45deg, #007bff, #00c6ff);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+.btn-gradient:hover {
+    background: linear-gradient(45deg, #0056b3, #0099cc);
+    color: #fff;
+}
