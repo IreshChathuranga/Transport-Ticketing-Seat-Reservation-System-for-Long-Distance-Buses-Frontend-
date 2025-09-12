@@ -70,6 +70,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         seatsContainer.appendChild(rowDiv);
     }
 
+    // Update available seats count
+    const availableSeatsCountElem = document.querySelector(".available-seats-count");
+    const availableSeats = seats.filter(seat => seat.status.toLowerCase() === "available").length;
+    if (availableSeatsCountElem) {
+        availableSeatsCountElem.textContent = `${availableSeats} seats available`;
+    }
+
     // Selected Seats & Fare Calculation
     // let selectedSeats = [];
     let totalBaseFare = 0;
