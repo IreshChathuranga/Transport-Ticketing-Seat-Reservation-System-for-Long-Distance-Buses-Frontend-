@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Check tripId
     if (!selectedBus?.tripId) {
         const infoRow = document.querySelector(".card.mb-4 .card-body .row");
-        if (infoRow) infoRow.innerHTML = `<p class="text-danger">No bus selected or trip ID missing!</p>`;
+        if (infoRow)
+            infoRow.innerHTML = `<p class="text-danger">No bus selected or trip ID missing!</p>`;
         return;
     }
 
@@ -37,7 +38,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
         console.error("Seat load failed:", err);
         const infoRow = document.querySelector(".card.mb-4 .card-body .row");
-        if (infoRow) infoRow.innerHTML = `<p class="text-danger">Failed to load seats!</p>`;
+        if (infoRow)
+            infoRow.innerHTML = `<p class="text-danger">Failed to load seats!</p>`;
         return;
     }
 
@@ -54,45 +56,48 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         for (let c = 0; c < cols; c++) {
             if (seatIndex < seats.length) {
-                const { status, seatId } = seats[seatIndex];
+                const { status, seatId, seatNumber } = seats[seatIndex]; // <-- API data
                 const seatDiv = document.createElement("div");
                 seatDiv.className = `seat ${status.toLowerCase()}`;
                 seatDiv.dataset.seatId = seatId;
-                seatDiv.textContent = seatNumber;
-
+                seatDiv.dataset.seatNumber = seatNumber;   // <-- DB seat_number
+                seatDiv.textContent = seatNumber;          // <-- show A1, B2, etc.
                 rowDiv.appendChild(seatDiv);
                 seatIndex++;
-                seatNumber++;
             }
         }
+
         seatsContainer.appendChild(rowDiv);
     }
 
     // Selected Seats & Fare Calculation
-    let selectedSeats = [];
+    // let selectedSeats = [];
     let totalBaseFare = 0;
     let totalService = 0;
     let totalTaxes = 0;
 
+    let selectedSeats = [];          // stores seatId
+    let selectedSeatNumbers = [];    // stores seat number (string)
+
+// Update selected seats & fare
     function updateSelectedSeats(seatId, seatNumber, isSelected) {
         const selectedSeatsList = document.getElementById("selectedSeatsList");
         const busType = selectedBus.busType || "Standard";
         const baseFare = selectedBus.baseFare || 0;
-
         let serviceChargePercent = 0;
         let tax = 0;
 
         switch(busType) {
             case "Luxury": serviceChargePercent = 0.02; tax = 4; break;
             case "Semi-Luxury": serviceChargePercent = 0.01; tax = 3; break;
-            case "Standard":
-            default: serviceChargePercent = 0.005; tax = 2; break;
+            case "Standard": default: serviceChargePercent = 0.005; tax = 2; break;
         }
 
         const seatServiceCharge = baseFare * serviceChargePercent;
 
         if (isSelected) {
             selectedSeats.push(seatId);
+            selectedSeatNumbers.push(seatNumber);  // <--- store seat number
             const seatBadge = document.createElement("span");
             seatBadge.className = "badge bg-primary me-1";
             seatBadge.textContent = `B${seatNumber}`;
@@ -104,6 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             totalTaxes += tax;
         } else {
             selectedSeats = selectedSeats.filter(id => id !== seatId);
+            selectedSeatNumbers = selectedSeatNumbers.filter(num => num !== seatNumber); // <--- remove seat number
             const badgeToRemove = selectedSeatsList.querySelector(`[data-seat-id="${seatId}"]`);
             if (badgeToRemove) badgeToRemove.remove();
 
@@ -124,9 +130,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     seatsContainer.addEventListener("click", (e) => {
         const seatDiv = e.target.closest(".seat");
         if (!seatDiv || !seatDiv.classList.contains("available")) return;
-
         const seatId = seatDiv.dataset.seatId;
-        const seatNumber = seatDiv.textContent;
+        const seatNumber = seatDiv.dataset.seatNumber; // <-- DB seat_number hoyanna
         seatDiv.classList.toggle("selected");
         updateSelectedSeats(seatId, seatNumber, seatDiv.classList.contains("selected"));
     });
@@ -134,6 +139,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Proceed to Payment
     const proceedBtn = document.getElementById("proceedToPayment");
     proceedBtn.addEventListener("click", async () => {
+        if (!token) {
+            alert("Please login before booking!");
+            return;
+        }
+
         const passengerName = document.getElementById("passengerName").value.trim();
         const passengerNic = document.getElementById("passengerNic").value.trim();
         const passengerPhone = document.getElementById("passengerPhone").value.trim();
@@ -144,30 +154,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            // Fetch user from backend using NIC
-            const res = await fetch(`http://localhost:8080/api/v1/register/nic/${passengerNic}`, {
+            // Fetch user by NIC
+            const resUser = await fetch(`http://localhost:8080/api/v1/register/nic/${passengerNic}`, {
                 headers: { "Authorization": `Bearer ${token}`, "Accept": "application/json" }
             });
-
-            if (!res.ok) {
+            if (!resUser.ok) {
                 alert("Passenger NIC not registered! Please register first.");
                 return;
             }
+            const user = await resUser.json();
 
-            const user = await res.json(); // should include user.userId
-
-            // Save booking to backend
+            // Create booking DTO
             const bookingDTO = {
                 userId: user.userId,
                 tripId: selectedBus.tripId,
-                bookingRef: `BK-${Date.now()}`, // generate unique ref
-                seatNumber: selectedSeats.join(","),
-                status: "HOLD",
+                bookingRef: `BK-${Date.now()}`,
+                seatNumber: selectedSeatNumbers.join(","),   // <-- FIX (e.g. "B12,A2")
+                status: "HELD",
                 totalAmount: totalBaseFare + totalService + totalTaxes,
                 currency: "LKR",
-                qrCodeData: "",
+                qrCodeData: ""
             };
 
+            // Save booking
             const bookingRes = await fetch("http://localhost:8080/api/v1/booking/save", {
                 method: "POST",
                 headers: {
@@ -177,14 +186,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                 body: JSON.stringify(bookingDTO)
             });
 
-            if (!bookingRes.ok) throw new Error("Booking save failed on server");
+            if (!bookingRes.ok) {
+                const errText = await bookingRes.text();
+                throw new Error(`Server Error: ${bookingRes.status} ${errText}`);
+            }
 
             alert("Booking saved successfully!");
             window.location.href = "payment-gateway.html";
 
         } catch (err) {
-            console.error(err);
-            alert("Error occurred during booking. Check console.");
+            console.error("Booking failed:", err);
+            alert("Booking failed. Check console for details.");
         }
     });
 });
