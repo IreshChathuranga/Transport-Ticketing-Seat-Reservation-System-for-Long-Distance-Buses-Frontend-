@@ -9,9 +9,14 @@
     <link href="../css/payment.css" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="#"><i class="fas fa-bus me-2"></i>Bus Ticketing</a>
+        <a class="navbar-brand" href="#"><img src="../image/logo2.png" alt="Bus Ticketing Logo" class="logo-img mb-2"></a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="bus-schedule.html"><i class="fas fa-history me-1"></i>Bookings</a>
+            <a class="nav-link active" href="user-profile.html"><i class="fas fa-user me-1"></i>Profile</a>
+            <a class="nav-link" href="#"><i class="fas fa-sign-out-alt me-1"></i>Logout</a>
+        </div>
     </div>
 </nav>
 
@@ -45,7 +50,7 @@
             <div class="row">
                 <!-- Payment Methods -->
                 <div class="col-md-8">
-                    <div class="card">
+                    <div class="card pay-card">
                         <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-credit-card me-2"></i>Payment Method</h5>
                         </div>
@@ -153,11 +158,10 @@
                         </div>
                         <div class="card-body">
                             <div class="booking-details mb-3">
-                                <h6 class="text-primary">ABC Transport Express</h6>
-                                <p class="mb-1"><strong>Route:</strong> Colombo → Kandy</p>
-                                <p class="mb-1"><strong>Date:</strong> Today, 08:30 AM</p>
-                                <p class="mb-1"><strong>Seats:</strong> B2</p>
-                                <p class="mb-0"><strong>Passenger:</strong> John Doe</p>
+                                <h6 id="orderCompany" class="text-primary"></h6>
+                                <p class="mb-1" id="orderRoute"><strong>Route:</strong> <span class="value"></span></p>
+                                <p class="mb-1" id="orderSeats"><strong>Seats:</strong> <span class="value"></span></p>
+                                <p class="mb-0" id="orderPassenger"><strong>Passenger:</strong> <span class="value"></span></p>
                             </div>
 
                             <hr>
@@ -165,29 +169,25 @@
                             <div class="fare-breakdown">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Ticket Fare:</span>
-                                    <span>Rs. 450</span>
+                                    <span id="orderFare">Rs. </span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Service Charge:</span>
-                                    <span>Rs. 25</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Payment Gateway:</span>
-                                    <span>Rs. 15</span>
+                                    <span id="orderService">Rs. </span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Taxes & Fees:</span>
-                                    <span>Rs. 10</span>
+                                    <span id="orderTaxes">Rs. </span>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between fw-bold fs-5">
                                     <span>Total Amount:</span>
-                                    <span class="text-success">Rs. 500</span>
+                                    <span id="orderTotal" class="text-success">Rs. </span>
                                 </div>
                             </div>
 
                             <button class="btn btn-success w-100 mt-3" id="payNowBtn">
-                                <i class="fas fa-lock me-2"></i>Pay Now - Rs. 500
+                                <i class="fas fa-lock me-2"></i>Pay Now - Rs.
                             </button>
 
                             <div class="text-center mt-3">
@@ -204,7 +204,68 @@
     </div>
 </div>
 
+<footer class="footer bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <h5 class="mb-3">
+                    GAMANA
+                </h5>
+                <p class="text-light">Your trusted partner for comfortable and safe long-distance bus travel across Sri Lanka.</p>
+                <div class="social-links">
+                    <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="mb-3">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-light text-decoration-none">Home</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="mb-3">Support</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-light text-decoration-none">Help Center</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Contact Us</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Terms & Conditions</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <h6 class="mb-3">Contact Info</h6>
+                <div class="contact-info">
+                    <p class="text-light mb-2">
+                        <i class="fas fa-phone me-2"></i>
+                        +94 11 234 5678
+                    </p>
+                    <p class="text-light mb-2">
+                        <i class="fas fa-envelope me-2"></i>
+                        info@lankaexpress.lk
+                    </p>
+                    <p class="text-light mb-0">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        123 Galle Road, Colombo 03, Sri Lanka
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="text-light mb-0">&copy; 2024 Lanka Express. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="text-light mb-0">Developed by Iresh Chathuranga</p>
+            </div>
+        </div>
+    </div>
+</footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/payment.js"></script>
+<script src="../js/payment.js"></script>
 </body>
 </html>

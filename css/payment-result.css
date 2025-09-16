@@ -1,0 +1,58 @@
+/* Adding styles for payment result pages */
+.success-icon,
+.cancel-icon {
+    animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.step.cancelled .step-number {
+    background-color: #dc3545;
+    color: white;
+}
+
+.step.cancelled::after {
+    background-color: #dc3545;
+}
+
+.qr-code-container {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    border: none;
+}
+
+.alert {
+    border-left: 4px solid;
+}
+
+.alert-info {
+    border-left-color: #0dcaf0;
+}
+
+.alert-warning {
+    border-left-color: #ffc107;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .success-icon i,
+    .cancel-icon i {
+        font-size: 3rem !important;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+    }
+}

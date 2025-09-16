@@ -76,9 +76,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (availableSeatsCountElem) {
         availableSeatsCountElem.textContent = `${availableSeats} seats available`;
     }
+    
 
-    // Selected Seats & Fare Calculation
-    // let selectedSeats = [];
     let totalBaseFare = 0;
     let totalService = 0;
     let totalTaxes = 0;
@@ -160,6 +159,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+
         try {
             // Fetch user by NIC
             const resUser = await fetch(`http://localhost:8080/api/v1/register/nic/${passengerNic}`, {
@@ -170,6 +170,26 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
             const user = await resUser.json();
+
+            // Save to localStorage for payment page
+            const bookingSummary = {
+                bookingRef: `BK-${Date.now()}`,                // Unique booking reference
+                tripId: selectedBus.tripId,                    // Trip ID
+                seatIds: selectedSeats.join(","),             // Selected seat IDs (comma-separated)
+                company: `${selectedBus.plateNo} (${selectedBus.busType})`, // Real bus company name
+                route: selectedBus.routeName,                 // Actual route
+                departure: selectedBus.departureTime,         // Departure time
+                seats: selectedSeatNumbers.join(", "),        // Seat numbers (e.g., "B1, A2")
+                passenger: passengerName,                     // Passenger name
+                baseFare: totalBaseFare,                      // Calculated base fare
+                serviceCharge: totalService,                  // Calculated service fee
+                taxes: totalTaxes,                            // Calculated taxes
+                totalAmount: totalBaseFare + totalService + totalTaxes // Total amount            // Total
+            };
+            localStorage.setItem("bookingSummary", JSON.stringify(bookingSummary));
+
+            const bookingRef = `BK-${Date.now()}`;
+            localStorage.setItem("bookingRef", bookingRef);
 
             // Create booking DTO
             const bookingDTO = {

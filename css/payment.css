@@ -1,7 +1,33 @@
-.navbar-brand {
-    font-weight: bold;
+.navbar{
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--light-color);
+    transition: all 0.3s ease;
+    background: transparent !important;
+    border-bottom: 1px solid #262c46;
+}
+.navbar .nav-link {
+    color: #262c46 !important;   /* Default color */
+    font-weight: 500;
 }
 
+/* Hover effect */
+.navbar .nav-link:hover {
+    color: #777a88 !important;       /* Hover color */
+}
+
+/* Active link */
+.navbar .nav-link.active {
+    color: #262c46 !important;      /* Active color */
+}
+.logo-img {
+    width: 150px;   /* logo width */
+    height: auto;   /* preserve aspect ratio */
+    display: block;
+    margin: 0 auto; /* center horizontally */
+    padding-right: 20px;
+    padding-top: 10px;
+}
 .card {
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -59,7 +85,7 @@
 }
 
 .step.active .step-number {
-    background-color: #007bff;
+    background-color: #262c46;
     color: white;
 }
 
@@ -80,10 +106,13 @@
     color: #495057;
     transition: all 0.3s ease;
 }
+.card-header{
+    background-color: rgb(224, 222, 222);
+}
 
 .payment-methods .btn-check:checked + .btn-outline-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #262c46;
+    border-color: #262c46;
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
@@ -150,4 +179,48 @@
     .payment-methods .btn-outline-primary {
         margin-bottom: 0.5rem;
     }
+}
+.pay-card{
+    margin-bottom: 50px;
+}
+.text{
+    font-size: 10px;
+}
+#orderCompany {
+    font-size: 1.2rem;   /* company + bus type */
+    font-weight: 600;
+    color: #0d6efd;      /* Bootstrap primary blue */
+}
+
+/*#orderRoute,*/
+/*#orderSeats,*/
+/*#orderPassenger {*/
+/*    font-size: 0.95rem;  !* slightly smaller text *!*/
+/*    color: #333;         !* dark grey *!*/
+/*}*/
+#orderFare,
+#orderService,
+#orderTaxes {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+#orderTotal {
+    font-size: 1.3rem;   /* highlight total */
+    font-weight: bold;
+    color: #198754;      /* Bootstrap success green */
+}
+#orderRoute strong,
+#orderSeats strong,
+#orderPassenger strong {
+    font-weight: bold;   /* only label bold */
+    margin-right: 5px;
+}
+
+#orderRoute .value,
+#orderSeats .value,
+#orderPassenger .value {
+    font-weight: normal; /* dynamic data normal */
+    color: #333;
+    font-size: 0.95rem;
 }
