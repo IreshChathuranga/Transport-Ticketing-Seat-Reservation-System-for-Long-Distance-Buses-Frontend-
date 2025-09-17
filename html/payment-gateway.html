@@ -9,7 +9,7 @@
     <link href="../css/payment.css" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="#"><img src="../image/logo2.png" alt="Bus Ticketing Logo" class="logo-img mb-2"></a>
         <div class="navbar-nav ms-auto">
@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <!-- Payment Steps -->
-            <div class="card mb-4">
+            <div class="card mb-4 pay-step">
                 <div class="card-body">
                     <div class="payment-steps">
                         <div class="step completed">
@@ -48,148 +48,52 @@
             </div>
 
             <div class="row">
-                <!-- Payment Methods -->
-                <div class="col-md-8">
-                    <div class="card pay-card">
-                        <div class="card-header">
-                            <h5 class="mb-0"><i class="fas fa-credit-card me-2"></i>Payment Method</h5>
-                        </div>
-                        <div class="card-body">
-                            <!-- Payment Method Selection -->
-                            <div class="payment-methods mb-4">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <input type="radio" class="btn-check" name="paymentMethod" id="creditCard" value="credit" checked>
-                                        <label class="btn btn-outline-primary w-100 py-3" for="creditCard">
-                                            <i class="fas fa-credit-card d-block mb-2"></i>
-                                            Credit/Debit Card
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="radio" class="btn-check" name="paymentMethod" id="mobilePay" value="mobile">
-                                        <label class="btn btn-outline-primary w-100 py-3" for="mobilePay">
-                                            <i class="fas fa-mobile-alt d-block mb-2"></i>
-                                            Mobile Payment
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="radio" class="btn-check" name="paymentMethod" id="bankTransfer" value="bank">
-                                        <label class="btn btn-outline-primary w-100 py-3" for="bankTransfer">
-                                            <i class="fas fa-university d-block mb-2"></i>
-                                            Bank Transfer
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="radio" class="btn-check" name="paymentMethod" id="digitalWallet" value="wallet">
-                                        <label class="btn btn-outline-primary w-100 py-3" for="digitalWallet">
-                                            <i class="fas fa-wallet d-block mb-2"></i>
-                                            Digital Wallet
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Credit Card Form -->
-                            <div id="creditCardForm" class="payment-form">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="cardNumber" class="form-label">Card Number</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
-                                            <span class="input-group-text">
-                                                    <i class="fab fa-cc-visa"></i>
-                                                </span>
-                                        </div>
-                                    </div>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-6">
-                                            <label for="expiryDate" class="form-label">Expiry Date</label>
-                                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" maxlength="5">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="cvv" class="form-label">CVV</label>
-                                            <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="3">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="cardName" class="form-label">Cardholder Name</label>
-                                        <input type="text" class="form-control" id="cardName" placeholder="John Doe">
-                                    </div>
-                                </form>
-                            </div>
-
-                            <!-- Mobile Payment Form -->
-                            <div id="mobilePayForm" class="payment-form d-none">
-                                <div class="text-center mb-3">
-                                    <div class="mobile-payment-options">
-                                        <button class="btn btn-outline-success me-2 mb-2">
-                                            <i class="fas fa-mobile me-1"></i>eZ Cash
-                                        </button>
-                                        <button class="btn btn-outline-primary me-2 mb-2">
-                                            <i class="fas fa-mobile me-1"></i>mCash
-                                        </button>
-                                        <button class="btn btn-outline-warning mb-2">
-                                            <i class="fas fa-mobile me-1"></i>Dialog Pay
-                                        </button>
-                                    </div>
-                                </div>
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="mobileNumber" class="form-label">Mobile Number</label>
-                                        <input type="tel" class="form-control" id="mobileNumber" placeholder="+94 77 123 4567">
-                                    </div>
-                                </form>
-                            </div>
-
-                            <!-- Security Notice -->
-                            <div class="alert alert-info">
-                                <i class="fas fa-shield-alt me-2"></i>
-                                Your payment information is encrypted and secure. We use industry-standard SSL encryption.
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Order Summary -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6 class="mb-0"><i class="fas fa-receipt me-2"></i>Order Summary</h6>
-                        </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 summary-card">
+                    <div class="card mb-4 shadow-sm border-0">
                         <div class="card-body">
+                            <h5 class="mb-3 text-dark fw-semibold border-bottom pb-2">
+                                <i class="fas fa-receipt me-2 text-primary"></i>Order Summary
+                            </h5>
+
+                            <!-- Booking Info -->
                             <div class="booking-details mb-3">
-                                <h6 id="orderCompany" class="text-primary"></h6>
-                                <p class="mb-1" id="orderRoute"><strong>Route:</strong> <span class="value"></span></p>
-                                <p class="mb-1" id="orderSeats"><strong>Seats:</strong> <span class="value"></span></p>
-                                <p class="mb-0" id="orderPassenger"><strong>Passenger:</strong> <span class="value"></span></p>
+                                <h6 id="orderCompany" class="text-primary mb-2"></h6>
+                                <p class="mb-1"><strong>Route:</strong> <span id="orderRoute"></span></p>
+                                <p class="mb-1"><strong>Seats:</strong> <span id="orderSeats"></span></p>
+                                <p class="mb-0"><strong>Passenger:</strong> <span id="orderPassenger"></span></p>
                             </div>
 
                             <hr>
 
-                            <div class="fare-breakdown">
+                            <!-- Fare Breakdown -->
+                            <div class="fare-breakdown mb-3">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Ticket Fare:</span>
-                                    <span id="orderFare">Rs. </span>
+                                    <span class="text-muted">Ticket Fare:</span>
+                                    <span id="orderFare" class="fw-medium"></span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Service Charge:</span>
-                                    <span id="orderService">Rs. </span>
+                                    <span class="text-muted">Service Charge:</span>
+                                    <span id="orderService" class="fw-medium"></span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Taxes & Fees:</span>
-                                    <span id="orderTaxes">Rs. </span>
+                                    <span class="text-muted">Taxes & Fees:</span>
+                                    <span id="orderTaxes" class="fw-medium"></span>
                                 </div>
                                 <hr>
-                                <div class="d-flex justify-content-between fw-bold fs-5">
+                                <div class="d-flex justify-content-between fs-5 fw-bold">
                                     <span>Total Amount:</span>
-                                    <span id="orderTotal" class="text-success">Rs. </span>
+                                    <span id="orderTotal" class="text-success"></span>
                                 </div>
                             </div>
 
-                            <button class="btn btn-success w-100 mt-3" id="payNowBtn">
-                                <i class="fas fa-lock me-2"></i>Pay Now - Rs.
+                            <!-- Pay Button -->
+                            <button class="btn btn-success w-100 mt-2" id="payNowBtn">
+                                <i class="fas fa-lock me-2"></i>Pay Now -
                             </button>
 
+                            <!-- Security Note -->
                             <div class="text-center mt-3">
                                 <small class="text-muted">
                                     <i class="fas fa-shield-alt me-1"></i>
@@ -199,6 +103,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

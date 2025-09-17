@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // bind
     document.querySelector("#orderCompany").textContent = bookingSummary.company || "";
-    document.querySelector("#orderRoute .value").textContent = bookingSummary.route || "";
-    document.querySelector("#orderSeats .value").textContent = bookingSummary.seats || "";
-    document.querySelector("#orderPassenger .value").textContent = bookingSummary.passenger || "";
+    document.querySelector("#orderRoute").textContent = bookingSummary.route || "";
+    document.querySelector("#orderSeats").textContent = bookingSummary.seats || "";
+    document.querySelector("#orderPassenger").textContent = bookingSummary.passenger || "";
     document.querySelector("#orderFare").textContent = `Rs. ${Number(bookingSummary.baseFare || 0).toFixed(2)}`;
     document.querySelector("#orderService").textContent = `Rs. ${Number(bookingSummary.serviceCharge || 0).toFixed(2)}`;
     document.querySelector("#orderTaxes").textContent = `Rs. ${Number(bookingSummary.taxes || 0).toFixed(2)}`;
