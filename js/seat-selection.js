@@ -170,10 +170,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
             const user = await resUser.json();
+            const bookingRefs = `BK-${Date.now()}`;
+            localStorage.setItem("bookingRefs", bookingRefs);
 
             // Save to localStorage for payment page
             const bookingSummary = {
-                bookingRef: `BK-${Date.now()}`,                // Unique booking reference
+                bookingRef: bookingRefs,                // Unique booking reference
                 tripId: selectedBus.tripId,                    // Trip ID
                 seatIds: selectedSeats.join(","),             // Selected seat IDs (comma-separated)
                 company: `${selectedBus.plateNo} (${selectedBus.busType})`, // Real bus company name
@@ -187,15 +189,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 totalAmount: totalBaseFare + totalService + totalTaxes // Total amount            // Total
             };
             localStorage.setItem("bookingSummary", JSON.stringify(bookingSummary));
-
-            const bookingRef = `BK-${Date.now()}`;
-            localStorage.setItem("bookingRef", bookingRef);
+            
 
             // Create booking DTO
             const bookingDTO = {
                 userId: user.userId,
                 tripId: selectedBus.tripId,
-                bookingRef: `BK-${Date.now()}`,
+                bookingRef:bookingRefs,
                 seatNumber: selectedSeatNumbers.join(","),   // <-- FIX (e.g. "B12,A2")
                 status: "HELD",
                 totalAmount: totalBaseFare + totalService + totalTaxes,

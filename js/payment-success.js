@@ -30,22 +30,27 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    fetch(`http://localhost:8080/api/v1/booking/${bookingRef}`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    })
-        .then(res => {
-            if (!res.ok) throw new Error("Failed to fetch booking");
-            return res.json();
-        })
-        .then(data => {
-            document.getElementById("status").innerText = data.data?.status || 'N/A';
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Error loading booking.");
-        });
+    // fetch(`http://localhost:8080/api/v1/booking/${bookingRef}`, {
+    //     headers: {
+    //         "Authorization": `Bearer ${token}`
+    //     }
+    // })
+    //     .then(res => {
+    //         if (!res.ok) {
+    //             return res.json().then(err => {
+    //                 console.error("Server responded with error:", err);
+    //                 throw new Error("Failed to fetch booking");
+    //             });
+    //         }
+    //         return res.json();
+    //     })
+    //     .then(data => {
+    //         document.getElementById("status").innerText = data.data?.status || 'N/A';
+    //     })
+    //     .catch(err => {
+    //         console.error("Fetch error:", err);
+    //         alert("Error loading booking.");
+    //     });
 
     // Generate QR Code (IMPORTANT: directly into the visible container!)
     const qrContainer = document.getElementById("qrcode");
