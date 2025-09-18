@@ -60,13 +60,21 @@ registrationForm.addEventListener("submit", async (e) => {
             body: JSON.stringify(userData)
         });
 
-        const result = await response.json();
+        let resultText = await response.text(); // Get raw text first
+
+        let result = {};
+        try {
+            result = JSON.parse(resultText); // Try to parse JSON
+        } catch (e) {
+            // Failed to parse, keep result as empty object
+        }
 
         if (response.ok) {
             alert(result.message || "User registered successfully!");
             registrationForm.reset();
+            window.location.href = "user-login.html"; // ✅ Redirect after success
         } else {
-            alert(result.message || "Registration failed. Please try again!");
+            alert(result.message || `Registration failed. Server responded with status ${response.status}`);
         }
     } catch (error) {
         console.error("Error:", error);

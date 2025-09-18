@@ -6,13 +6,14 @@
     <title>Admin Dashboard - Bus Ticketing System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
     <link href="../css/admin.css" rel="stylesheet">
 </head>
 <body>
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><i class="fas fa-bus me-2"></i>Admin Panel</a>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#"><img src="../image/logo3.png" alt="Bus Ticketing Logo" class="logo-img mb-2"></a>
         <div class="navbar-nav ms-auto">
             <div class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -79,10 +80,9 @@
             <!-- Dashboard Section -->
             <div id="dashboard-section" class="content-section">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard Overview</h2>
+                    <h2 class="text-white">DASHBORD  OVERVIEW</h2>
                     <div class="date-range">
-                        <input type="date" class="form-control d-inline-block w-auto me-2" id="startDate">
-                        <input type="date" class="form-control d-inline-block w-auto" id="endDate">
+                        <input type="date" class="form-control d-inline-block w-auto" id="dashDate">
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@
                 <!-- Charts Row -->
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="card">
+                        <div class="card dash-card">
                             <div class="card-header">
                                 <h5 class="mb-0">Booking Trends</h5>
                             </div>
@@ -155,7 +155,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card dash-card">
                             <div class="card-header">
                                 <h5 class="mb-0">Popular Routes</h5>
                             </div>
@@ -185,31 +185,32 @@
             <!-- Bus Management Section -->
             <div id="buses-section" class="content-section d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="fas fa-bus me-2"></i>Bus Management</h2>
+                    <h2 class="text-white">BUS MANAGEMENT</h2>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBusModal">
                         <i class="fas fa-plus me-2"></i>Add New Bus
                     </button>
                 </div>
 
-                <div class="card">
+                <div class="card dash-card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <th>Bus Number</th>
-                                    <th>Model</th>
-                                    <th>Capacity</th>
+                                    <th>Bus ID</th>
+                                    <th>Plate Number</th>
+                                    <th>Bus Type</th>
+                                    <th>Amenities</th>
+                                    <th>Operator</th>
                                     <th>Status</th>
-                                    <th>Last Service</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>ABC-1234</td>
-                                    <td>Volvo B9R</td>
-                                    <td>45 seats</td>
+                                    <td>1</td>
+                                    <td>Vk-B9R</td>
+                                    <td>sdds</td>
                                     <td><span class="badge bg-success">Active</span></td>
                                     <td>2024-01-15</td>
                                     <td>
@@ -232,13 +233,13 @@
             <!-- Route Management Section -->
             <div id="routes-section" class="content-section d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="fas fa-route me-2"></i>Route Management</h2>
+                    <h2 class="text-white">ROUTE MANAGEMENT</h2>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRouteModal">
                         <i class="fas fa-plus me-2"></i>Add New Route
                     </button>
                 </div>
 
-                <div class="card">
+                <div class="card dash-card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -281,13 +282,13 @@
             <!-- Added Schedule Management Section -->
             <div id="schedules-section" class="content-section d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="fas fa-calendar-alt me-2"></i>Schedule Management</h2>
+                    <h2 class="text-white">SCHEDULE MANAGEMENT</h2>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
                         <i class="fas fa-plus me-2"></i>Add New Schedule
                     </button>
                 </div>
 
-                <div class="card">
+                <div class="card dash-card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -354,7 +355,7 @@
             <!-- Added Booking Management Section -->
             <div id="bookings-section" class="content-section d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="fas fa-ticket-alt me-2"></i>Booking Management</h2>
+                    <h2 class="text-white">BOOKING MANAGEMENT</h2>
                     <div class="d-flex gap-2">
                         <select class="form-select w-auto">
                             <option>All Bookings</option>
@@ -366,7 +367,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card dash-card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -433,7 +434,7 @@
             <!-- Added User Management Section -->
             <div id="users-section" class="content-section d-none">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2><i class="fas fa-users me-2"></i>User Management</h2>
+                    <h2 class="text-white">USER MANAGEMENT</h2>
                     <div class="d-flex gap-2">
                         <select class="form-select w-auto">
                             <option>All Users</option>
@@ -447,7 +448,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card dash-card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -838,6 +839,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/admin.js"></script>
+<script src="../js/admin.js"></script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 // login.js
 
 document.addEventListener("DOMContentLoaded", () => {
+    const ORIGIN = window.location.origin;
+    console.log("Current Origin:", ORIGIN);
 
     // -----------------------------
     // Word spin animation
@@ -72,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // ✅ Extract token from response.data.token
+            //Extract token from response.data.token
             const token = data?.data?.token;
             const user = data?.data?.user;
 
@@ -126,3 +128,58 @@ document.addEventListener("DOMContentLoaded", () => {
         return res;
     }
 });
+
+
+google.accounts.id.initialize({
+    client_id: "948863779289-371gubqgtieojjvm7onlqm6qc8gi8i2r.apps.googleusercontent.com", // Replace this!
+    callback: handleCredentialResponse,
+    ux_mode: "popup" //Important: popup mode
+});
+
+// ✅ Render your custom-looking button
+google.accounts.id.renderButton(
+    document.getElementById("customGoogleBtn"),
+    {
+        theme: "outline",   // "outline" | "filled_blue" | "filled_black"
+        size: "large",      // "small" | "medium" | "large"
+        type: "standard",   // "standard" | "icon"
+        shape: "pill",      // "rectangular" | "pill" | "circle" | "square"
+        logo_alignment: "center"
+    }
+);
+setTimeout(() => {
+    const googleBtnText = document
+        .querySelector('#customGoogleBtn span');
+    if (googleBtnText) {
+        googleBtnText.innerText = "Continue with Google";
+    }
+}, 100);
+
+function handleCredentialResponse(response) {
+    const idToken = response.credential;
+    console.log("Google ID Token: ", idToken);
+
+    // ✅ Send to backend
+    fetch("http://localhost:8080/api/v1/auth/google-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data?.data?.token) {
+                localStorage.setItem("jwtToken", data.data.token);
+                localStorage.setItem("user", JSON.stringify(data.data.user));
+                alert("Google login successful!");
+                window.location.href = "../html/user-profile.html";
+            } else {
+                alert(data?.message || "Login failed");
+            }
+        })
+        .catch(err => {
+            console.error("Error during Google login:", err);
+            alert("Server error");
+        });
+}
+
+
